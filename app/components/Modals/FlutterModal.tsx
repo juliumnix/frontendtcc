@@ -1,10 +1,15 @@
 import { ArrowRight } from "lucide-react";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Modal from "../Modal";
+import axios from "axios";
 
 type FlutterModalProps = {
   isVisible: boolean;
   onClose: () => void;
+};
+
+type FlutterGetNameProps = {
+  packages: String[];
 };
 
 export default function FlutterModal({
@@ -13,6 +18,19 @@ export default function FlutterModal({
 }: FlutterModalProps) {
   const [results, setResults] = useState<String[]>([]);
   const [dependency, setDependency] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  async function fetchData() {
+    try {
+      const response = await axios.get("/getNames");
+      const data = response.data.packages;
+      // console.log(data);
+      // setPackages(data);
+      return data;
+    } catch (error) {
+      console.error("Erro ao buscar pacotes:", error);
+    }
+  }
 
   const handleDependencyName = (event: ChangeEvent<HTMLInputElement>) => {
     setDependency(event.target.value);
@@ -23,63 +41,13 @@ export default function FlutterModal({
     onClose();
   };
 
-  // const fetchData = async () => {
-  //   const url = `https://pub.dev/api/package-name-completion-data`;
-
-  //   try {
-  //     const headers = new Headers();
-  //     headers.append("Accept-Encoding", "gzip");
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: headers,
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error(`Erro HTTP! Status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setResults(data);
-  //   } catch (error) {
-  //     console.error("Erro ao buscar dados:", error);
-  //   }
-  // };
-
-  async function fetchData() {
-    const url = "https://pub.dev/api/package-names";
-
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "accept-encoding": "gzip",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Erro HTTP! Status: ${response.status}`);
-      }
-
-      // Verifique o cabeçalho "content-encoding" para determinar se a resposta está codificada em gzip
-      const contentEncoding = response.headers.get("content-encoding");
-
-      if (contentEncoding === "gzip") {
-        // A resposta está codificada em gzip, você pode descomprimi-la se necessário
-        const buffer = await response.arrayBuffer();
-        // Aqui, você pode descomprimir o buffer do gzip conforme necessário
-        // Por exemplo, usando a biblioteca 'zlib' ou outra biblioteca de descompressão
-      }
-
-      const data = await response.json();
-      console.log(data);
-      // Faça algo com os dados aqui
-    } catch (error) {
-      console.error("Erro ao buscar dados:", error);
-    }
-  }
-
-  const handleClickItem = (item: any) => {
-    console.log(item.package.name);
+  const handleDependencySearch = async () => {
+    const packages = await fetchData();
+    const filter = packages.filter((item: String) =>
+      item.toLowerCase().includes(dependency.toLowerCase())
+    );
+    console.log;
+    setResults(filter);
   };
 
   return (
@@ -97,7 +65,7 @@ export default function FlutterModal({
         />
         <button
           className="w text-lg w-96 p-2 font-bold gap-4 border-2 border-blue-400 flex justify-center items-center rounded text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors"
-          onClick={() => fetchData()}
+          onClick={() => handleDependencySearch()}
         >
           Buscar
           <ArrowRight />
@@ -110,12 +78,13 @@ export default function FlutterModal({
           {results.map((item, index) => (
             <>
               <button
-                onClick={() => handleClickItem(item)}
+                onClick={() => {
+                  console.log(item);
+                }}
                 key={index}
                 className="flex w-96 border p-2 rounded hover:bg-zinc-600 mb-2"
               >
                 <h1 className="text-left">{item}</h1>
-                {/* <h1 className="ml-auto">{item.package.version}</h1> */}
               </button>
             </>
           ))}
