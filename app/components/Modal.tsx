@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React from "react";
 
 type ModalProps = {
   isVisible: boolean;
@@ -9,8 +9,7 @@ type ModalProps = {
 export default function Modal({
   isVisible,
   onClose,
-  children,
-  ...rest
+  children
 }: ModalProps) {
   if (!isVisible) return null;
 

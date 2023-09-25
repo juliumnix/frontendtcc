@@ -8,24 +8,17 @@ type FlutterModalProps = {
   onClose: () => void;
 };
 
-type FlutterGetNameProps = {
-  packages: String[];
-};
-
 export default function FlutterModal({
   isVisible,
   onClose,
 }: FlutterModalProps) {
   const [results, setResults] = useState<String[]>([]);
   const [dependency, setDependency] = useState("");
-  const [searchTerm, setSearchTerm] = useState<string>("");
 
   async function fetchData() {
     try {
       const response = await axios.get("/getNames");
       const data = response.data.packages;
-      // console.log(data);
-      // setPackages(data);
       return data;
     } catch (error) {
       console.error("Erro ao buscar pacotes:", error);
@@ -46,7 +39,6 @@ export default function FlutterModal({
     const filter = packages.filter((item: String) =>
       item.toLowerCase().includes(dependency.toLowerCase())
     );
-    console.log;
     setResults(filter);
   };
 
