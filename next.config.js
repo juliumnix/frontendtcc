@@ -6,11 +6,7 @@ module.exports = {
     return [
       {
         source: "/getNames",
-        destination: "https://pub.dev/api/package-name-completion-data", // Use a URL do seu servidor proxy aqui
-      },
-      {
-        source: "/cats",
-        destination: "https://meowfacts.herokuapp.com",
+        destination: "https://pub.dev/api/package-name-completion-data",
       },
       {
         source: "/flutter/:path*",
