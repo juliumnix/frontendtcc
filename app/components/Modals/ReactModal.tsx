@@ -1,6 +1,7 @@
 import React, { ChangeEvent, Key, useEffect, useState } from "react";
 import Modal from "../Modal";
 import { ArrowRight } from "lucide-react";
+import { useCreateProjectContext } from "@/app/context/createProjectContext";
 
 type ReactModalProps = {
   isVisible: boolean;
@@ -16,6 +17,7 @@ type ResultsProps = {
 export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
   const [results, setResults] = useState<ResultsProps[]>([]);
   const [dependency, setDependency] = useState("");
+  const { updateReactDependencies } = useCreateProjectContext();
 
   const handleDependencyName = (event: ChangeEvent<HTMLInputElement>) => {
     setDependency(event.target.value);
@@ -44,7 +46,8 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
   };
 
   const handleClickItem = (item: ResultsProps) => {
-    console.log(item.package.name);
+    updateReactDependencies(item.package.name, item.package.version);
+    onClose();
   };
 
   return (

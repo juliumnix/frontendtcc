@@ -5,6 +5,7 @@ import OpenDependency from "./components/OpenDependency";
 import Modal from "./components/Modal";
 import ReactModal from "./components/Modals/ReactModal";
 import FlutterModal from "./components/Modals/FlutterModal";
+import { useCreateProjectContext } from "./context/createProjectContext";
 
 export default function Home() {
   const [selectedOption, setSelectedOption] = useState("");
@@ -14,6 +15,19 @@ export default function Home() {
     useState(false);
   const [showModalFlutterDependencies, setShowModalFlutterDependencies] =
     useState(false);
+  const {
+    updateName,
+    updateId,
+    updateArchitecture,
+    updateNeedZIPFile,
+    createProjectStructure,
+  } = useCreateProjectContext();
+
+  const generateUniqueString = () => {
+    return Array.from({ length: 7 }, () =>
+      Math.random().toString(36).charAt(2)
+    ).join("");
+  };
 
   const handleProjectName = (event: ChangeEvent<HTMLInputElement>) => {
     setProjectName(event.target.value);
@@ -25,6 +39,14 @@ export default function Home() {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+  };
+
+  const nextToAutentication = () => {
+    updateName(projectName);
+    updateId(generateUniqueString());
+    updateArchitecture(selectedOption);
+    updateNeedZIPFile(isChecked);
+    console.log(createProjectStructure());
   };
 
   return (
@@ -105,7 +127,10 @@ export default function Home() {
               />
             </>
           )}
-          <button className="w text-2xl p-4 font-bold gap-4 border-2 border-blue-400 flex justify-center items-center rounded text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors">
+          <button
+            onClick={() => nextToAutentication()}
+            className="w text-2xl p-4 font-bold gap-4 border-2 border-blue-400 flex justify-center items-center rounded text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors"
+          >
             Autenticar
             <ArrowRight width={36} height={36} />
           </button>

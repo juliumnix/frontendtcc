@@ -42,6 +42,11 @@ export default function FlutterModal({
     setResults(filter);
   };
 
+  const handleClick = async (item: String) => {
+    const response = await axios.get(`/flutter/${item}`);
+    console.log(response.data.latest.version);
+  };
+
   return (
     <Modal isVisible={isVisible} onClose={handleOnCloseEvents}>
       <div className="flex flex-col gap-2">
@@ -71,7 +76,7 @@ export default function FlutterModal({
             <>
               <button
                 onClick={() => {
-                  console.log(item);
+                  handleClick(item);
                 }}
                 key={index}
                 className="flex w-96 border p-2 rounded hover:bg-zinc-600 mb-2"
