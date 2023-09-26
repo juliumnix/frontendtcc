@@ -1,7 +1,8 @@
 import { ArrowRight } from "lucide-react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Modal from "../Modal";
 import axios from "axios";
+import { useCreateProjectContext } from "@/app/context/createProjectContext";
 
 type FlutterModalProps = {
   isVisible: boolean;
@@ -14,6 +15,7 @@ export default function FlutterModal({
 }: FlutterModalProps) {
   const [results, setResults] = useState<String[]>([]);
   const [dependency, setDependency] = useState("");
+  const { updateFlutterDependencies } = useCreateProjectContext();
 
   async function fetchData() {
     try {
@@ -45,6 +47,8 @@ export default function FlutterModal({
   const handleClick = async (item: String) => {
     const response = await axios.get(`/flutter/${item}`);
     console.log(response.data.latest.version);
+    updateFlutterDependencies(item, response.data.latest.version)
+    
   };
 
   return (
