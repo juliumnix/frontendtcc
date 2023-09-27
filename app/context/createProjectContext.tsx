@@ -1,6 +1,6 @@
 "use client";
 import React, { ReactNode, createContext, useContext, useState } from "react";
-import { DependeciesProps, ProjectData } from "./types.project";
+import { DependeciesProps } from "./types.project";
 
 type createProjectContextProps = {
   children: ReactNode;
@@ -20,6 +20,8 @@ type ContextProps = {
   createProjectStructure: () => void;
   cleanState: () => void;
   clearDependencies: () => void;
+  reactDependencies: DependeciesProps[];
+  flutterDependencies: DependeciesProps[];
 };
 
 export const CreateProjectContext = createContext<ContextProps>({
@@ -36,6 +38,8 @@ export const CreateProjectContext = createContext<ContextProps>({
   createProjectStructure: () => {},
   cleanState: () => {},
   clearDependencies: () => {},
+  reactDependencies: [],
+  flutterDependencies: [],
 });
 
 export const useCreateProjectContext = () => useContext(CreateProjectContext);
@@ -157,6 +161,8 @@ const CreateProjectProvider = ({ children }: createProjectContextProps) => {
         createProjectStructure,
         cleanState,
         clearDependencies,
+        reactDependencies,
+        flutterDependencies,
       }}
     >
       {children}

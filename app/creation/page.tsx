@@ -6,6 +6,8 @@ import ReactModal from "../components/Modals/ReactModal";
 import FlutterModal from "../components/Modals/FlutterModal";
 import { useCreateProjectContext } from "../context/createProjectContext";
 import { useRouter } from "next/navigation";
+import { it } from "node:test";
+import ItemListDependency from "../components/ItemListDependency";
 
 export default function Home() {
   const [selectedOption, setSelectedOption] = useState("");
@@ -22,6 +24,10 @@ export default function Home() {
     updateArchitecture,
     updateNeedZIPFile,
     clearDependencies,
+    reactDependencies,
+    flutterDependencies,
+    removeReactDependencies,
+    removeFlutterDependencies,
   } = useCreateProjectContext();
 
   const generateUniqueString = () => {
@@ -54,6 +60,7 @@ export default function Home() {
     updateId(generateUniqueString());
     updateArchitecture(selectedOption);
     updateNeedZIPFile(isChecked);
+    // TODO - criar verificação para caso dados estejam vazio
     router.push("/creation/githubAutentication");
   };
 
@@ -125,6 +132,17 @@ export default function Home() {
                   setShowModalReactDependencies(!showModalReactDependencies);
                 }}
               />
+              {reactDependencies.length > 0 && (
+                <div className="flex flex-col w-72 gap-2">
+                  {reactDependencies.map((item) => (
+                    <ItemListDependency
+                      name={item.name}
+                      version={item.version}
+                      onClickDelete={() => removeReactDependencies(item.name)}
+                    />
+                  ))}
+                </div>
+              )}
               <OpenDependency
                 title={"Adicionar dependencias do Flutter"}
                 onClick={() => {
@@ -133,6 +151,17 @@ export default function Home() {
                   );
                 }}
               />
+              {flutterDependencies.length > 0 && (
+                <div className="flex flex-col w-72 gap-2">
+                  {flutterDependencies.map((item) => (
+                    <ItemListDependency
+                      name={item.name}
+                      version={item.version}
+                      onClickDelete={() => removeFlutterDependencies(item.name)}
+                    />
+                  ))}
+                </div>
+              )}
             </>
           )}
           <button

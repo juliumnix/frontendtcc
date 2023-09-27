@@ -47,7 +47,7 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
 
   const handleClickItem = (item: ResultsProps) => {
     updateReactDependencies(item.package.name, item.package.version);
-    onClose();
+    handleOnCloseEvents();
   };
 
   return (
@@ -64,7 +64,7 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
           onChange={(event) => handleDependencyName(event)}
         />
         <button
-          className="w text-lg w-96 p-2 font-bold gap-4 border-2 border-blue-400 flex justify-center items-center rounded text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors"
+          className="text-lg w-96 p-2 font-bold gap-4 border-2 border-blue-400 flex justify-center items-center rounded text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors"
           onClick={() => fetchData()}
         >
           Buscar
