@@ -19,6 +19,7 @@ type ContextProps = {
   removeFlutterDependencies: (name: String) => void;
   createProjectStructure: () => void;
   cleanState: () => void;
+  clearDependencies: () => void;
 };
 
 export const CreateProjectContext = createContext<ContextProps>({
@@ -34,6 +35,7 @@ export const CreateProjectContext = createContext<ContextProps>({
   removeFlutterDependencies: () => {},
   createProjectStructure: () => {},
   cleanState: () => {},
+  clearDependencies: () => {},
 });
 
 export const useCreateProjectContext = () => useContext(CreateProjectContext);
@@ -109,6 +111,11 @@ const CreateProjectProvider = ({ children }: createProjectContextProps) => {
     setFlutterDependencies(removedList);
   };
 
+  const clearDependencies = () => {
+    setReactDependencies([]);
+    setFlutterDependencies([]);
+  };
+
   const createProjectStructure = () => {
     const project = {
       name,
@@ -149,6 +156,7 @@ const CreateProjectProvider = ({ children }: createProjectContextProps) => {
         removeFlutterDependencies,
         createProjectStructure,
         cleanState,
+        clearDependencies,
       }}
     >
       {children}

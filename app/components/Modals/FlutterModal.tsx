@@ -46,9 +46,8 @@ export default function FlutterModal({
 
   const handleClick = async (item: String) => {
     const response = await axios.get(`/flutter/${item}`);
-    console.log(response.data.latest.version);
-    updateFlutterDependencies(item, response.data.latest.version)
-    
+    updateFlutterDependencies(item, response.data.latest.version);
+    onClose();
   };
 
   return (
