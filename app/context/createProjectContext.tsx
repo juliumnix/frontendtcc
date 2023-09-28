@@ -22,6 +22,7 @@ type ContextProps = {
   clearDependencies: () => void;
   reactDependencies: DependeciesProps[];
   flutterDependencies: DependeciesProps[];
+  id: String;
 };
 
 export const CreateProjectContext = createContext<ContextProps>({
@@ -40,6 +41,7 @@ export const CreateProjectContext = createContext<ContextProps>({
   clearDependencies: () => {},
   reactDependencies: [],
   flutterDependencies: [],
+  id: "",
 });
 
 export const useCreateProjectContext = () => useContext(CreateProjectContext);
@@ -163,6 +165,7 @@ const CreateProjectProvider = ({ children }: createProjectContextProps) => {
         clearDependencies,
         reactDependencies,
         flutterDependencies,
+        id,
       }}
     >
       {children}

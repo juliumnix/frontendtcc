@@ -2,6 +2,7 @@ import React, { ChangeEvent, Key, useEffect, useState } from "react";
 import Modal from "../Modal";
 import { ArrowRight } from "lucide-react";
 import { useCreateProjectContext } from "@/app/context/createProjectContext";
+import Loading from "../Loading";
 
 type ReactModalProps = {
   isVisible: boolean;
@@ -17,6 +18,7 @@ type ResultsProps = {
 export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
   const [results, setResults] = useState<ResultsProps[]>([]);
   const [dependency, setDependency] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { updateReactDependencies } = useCreateProjectContext();
 
   const handleDependencyName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +29,7 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
     const url = `https://api.npms.io/v2/search?q=${dependency}`;
 
     try {
+      setIsLoading(true);
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -37,6 +40,8 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
       setResults(data.results);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,12 +68,23 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
           placeholder="Ex: axios"
           onChange={(event) => handleDependencyName(event)}
         />
+
         <button
           className="text-lg w-96 p-2 font-bold gap-4 border-2 border-blue-400 flex justify-center items-center rounded text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors"
           onClick={() => fetchData()}
         >
-          Buscar
-          <ArrowRight />
+          {isLoading ? (
+            <>
+              <div
+                className={`w-7 h-7 border-t-4 border-blue-500 border-solid rounded-full animate-spin`}
+              />
+            </>
+          ) : (
+            <>
+              Buscar
+              <ArrowRight />
+            </>
+          )}
         </button>
         <div
           className={`overflow-y-scroll no-scrollbar ${
