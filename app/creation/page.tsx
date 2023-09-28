@@ -6,7 +6,6 @@ import ReactModal from "../components/Modals/ReactModal";
 import FlutterModal from "../components/Modals/FlutterModal";
 import { useCreateProjectContext } from "../context/createProjectContext";
 import { useRouter } from "next/navigation";
-import { it } from "node:test";
 import ItemListDependency from "../components/ItemListDependency";
 
 export default function Home() {
@@ -36,8 +35,6 @@ export default function Home() {
     ).join("");
   };
 
-  // TODO - fazer listagem de dependencias selecionadas, e fazer função de excluir ao clicar em lixeirinha
-
   // TODO - integrar com api e fazer esquema de criar localmente e no servidor
 
   const handleProjectName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -60,8 +57,9 @@ export default function Home() {
     updateId(generateUniqueString());
     updateArchitecture(selectedOption);
     updateNeedZIPFile(isChecked);
-    // TODO - criar verificação para caso dados estejam vazio
-    router.push("/creation/githubAutentication");
+    if (projectName !== "" && selectedOption !== "") {
+      router.push("/creation/githubAutentication");
+    }
   };
 
   return (

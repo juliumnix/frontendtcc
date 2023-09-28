@@ -13,7 +13,7 @@ export default function ItemListDependency({
   onClickDelete,
 }: ItemListDependencyProps) {
   return (
-    <div className=" border rounded min-w-full text-blue-500 flex p-3">
+    <div className="border rounded min-w-full text-blue-500 flex p-3">
       <p>{name}</p>
       <div className="flex gap-2 ml-auto">
         <p>{version}</p>
