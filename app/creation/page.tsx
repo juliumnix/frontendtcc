@@ -132,8 +132,9 @@ export default function Home() {
               />
               {reactDependencies.length > 0 && (
                 <div className="flex flex-col w-72 gap-2">
-                  {reactDependencies.map((item) => (
+                  {reactDependencies.map((item, index) => (
                     <ItemListDependency
+                      key={index}
                       name={item.name}
                       version={item.version}
                       onClickDelete={() => removeReactDependencies(item.name)}
@@ -151,8 +152,9 @@ export default function Home() {
               />
               {flutterDependencies.length > 0 && (
                 <div className="flex flex-col w-72 gap-2">
-                  {flutterDependencies.map((item) => (
+                  {flutterDependencies.map((item, index) => (
                     <ItemListDependency
+                      key={index}
                       name={item.name}
                       version={item.version}
                       onClickDelete={() => removeFlutterDependencies(item.name)}
