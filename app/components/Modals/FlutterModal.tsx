@@ -1,7 +1,8 @@
 import { ArrowRight } from "lucide-react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Modal from "../Modal";
 import axios from "axios";
+import { useCreateProjectContext } from "@/app/context/createProjectContext";
 
 type FlutterModalProps = {
   isVisible: boolean;
@@ -14,6 +15,8 @@ export default function FlutterModal({
 }: FlutterModalProps) {
   const [results, setResults] = useState<String[]>([]);
   const [dependency, setDependency] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { updateFlutterDependencies } = useCreateProjectContext();
 
   async function fetchData() {
     try {
@@ -35,11 +38,25 @@ export default function FlutterModal({
   };
 
   const handleDependencySearch = async () => {
-    const packages = await fetchData();
-    const filter = packages.filter((item: String) =>
-      item.toLowerCase().includes(dependency.toLowerCase())
-    );
-    setResults(filter);
+    try {
+      setIsLoading(true);
+      const packages = await fetchData();
+      const filter = packages.filter((item: String) =>
+        item.toLowerCase().includes(dependency.toLowerCase())
+      );
+      setResults(filter);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClick = async (item: String) => {
+    try {
+      const response = await axios.get(`/flutter/${item}`);
+      updateFlutterDependencies(item, response.data.latest.version);
+      onClose();
+    } catch (error) {}
   };
 
   return (
@@ -59,8 +76,18 @@ export default function FlutterModal({
           className="w text-lg w-96 p-2 font-bold gap-4 border-2 border-blue-400 flex justify-center items-center rounded text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors"
           onClick={() => handleDependencySearch()}
         >
-          Buscar
-          <ArrowRight />
+          {isLoading ? (
+            <>
+              <div
+                className={`w-7 h-7 border-t-4 border-blue-500 border-solid rounded-full animate-spin`}
+              />
+            </>
+          ) : (
+            <>
+              Buscar
+              <ArrowRight />
+            </>
+          )}
         </button>
         <div
           className={`overflow-y-scroll no-scrollbar ${
@@ -71,7 +98,7 @@ export default function FlutterModal({
             <>
               <button
                 onClick={() => {
-                  console.log(item);
+                  handleClick(item);
                 }}
                 key={index}
                 className="flex w-96 border p-2 rounded hover:bg-zinc-600 mb-2"

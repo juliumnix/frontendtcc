@@ -1,3 +1,4 @@
+import CreateProjectProvider from "./context/createProjectContext";
 import "./globals.css";
 import type { Metadata } from "next";
 
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-zinc-800 text-zinc-50 font-semibold">{children}</body>
+      <body className="bg-zinc-800 text-zinc-50 font-semibold">
+        <CreateProjectProvider>{children}</CreateProjectProvider>
+      </body>
     </html>
   );
 }

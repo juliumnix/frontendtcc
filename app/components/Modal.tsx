@@ -6,11 +6,7 @@ type ModalProps = {
   children: React.ReactNode;
 };
 
-export default function Modal({
-  isVisible,
-  onClose,
-  children
-}: ModalProps) {
+export default function Modal({ isVisible, onClose, children }: ModalProps) {
   if (!isVisible) return null;
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
