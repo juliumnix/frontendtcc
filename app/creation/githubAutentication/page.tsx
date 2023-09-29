@@ -2,8 +2,14 @@
 import { ArrowRight } from "lucide-react";
 import { useCreateProjectContext } from "../../context/createProjectContext";
 import React, { ChangeEvent, useState } from "react";
+import NotifierModal from "@/app/components/Modals/NotifierModal";
+import { GlobalURL } from "@/url";
+import receptServer from "@/serverConfig";
+import createAPIInstance from "@/axios";
 
 export default function GithubAutentication() {
+  const [notifierModal, setNotifierModal] = useState(false);
+  const [running, setRunning] = useState(false);
   const { createProjectStructure, updateRepositoryKey, updateOwnerName } =
     useCreateProjectContext();
 
@@ -15,9 +21,12 @@ export default function GithubAutentication() {
     updateRepositoryKey(event.target.value);
   };
 
-  const handleCreateProject = () => {
-    // TODO - fazer chamada da api e abrir o modal com comunicaçao sse
-    console.log(createProjectStructure());
+  const handleCreateProject = async () => {
+    setRunning(true);
+    setNotifierModal(true);
+    const serverURL = receptServer(GlobalURL);
+    const api = createAPIInstance(serverURL);
+    await api.post(`${serverURL}/create`, createProjectStructure());
   };
 
   return (
@@ -71,6 +80,14 @@ export default function GithubAutentication() {
           </button>
         </div>
       </div>
+      <NotifierModal
+        isVisible={notifierModal}
+        onClose={() => {
+          setNotifierModal(false);
+        }}
+        running={running}
+        setRunning={setRunning}
+      />
     </main>
   );
 }

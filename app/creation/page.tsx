@@ -35,8 +35,6 @@ export default function Home() {
     ).join("");
   };
 
-  // TODO - integrar com api e fazer esquema de criar localmente e no servidor
-
   const handleProjectName = (event: ChangeEvent<HTMLInputElement>) => {
     setProjectName(event.target.value);
   };
