@@ -37,17 +37,7 @@ export default function NotifierModal({
           Accept: "text/event-stream",
         },
         signal: controller.signal,
-        onopen(res) {
-          if (res.ok && res.status === 200) {
-            console.log("Connection made ", res);
-          } else if (
-            res.status >= 400 &&
-            res.status < 500 &&
-            res.status !== 429
-          ) {
-            console.log("Client side error ", res);
-          }
-        },
+
         async onmessage(event) {
           console.log(event.data);
           const parsedData = JSON.parse(event.data);
