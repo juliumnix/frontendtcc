@@ -26,7 +26,8 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
   };
 
   const fetchData = async () => {
-    const url = `https://api.npms.io/v2/search?q=${dependency}`;
+    const searchText = dependency.replace(/\s/g, "-");
+    const url = `https://registry.npmjs.org/-/v1/search?text=${searchText}`;
 
     try {
       setIsLoading(true);
@@ -37,7 +38,7 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
       }
 
       const data = await response.json();
-      setResults(data.results);
+      setResults(data.objects);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     } finally {
@@ -104,12 +105,6 @@ export default function ReactModal({ isVisible, onClose }: ReactModalProps) {
             </>
           ))}
         </div>
-        {results.length != 0 && (
-          <h1 className="w-96">
-            ⚠️ Atenção: as bibliotecas estão desatualizadas, caso deseje
-            utilizar a última versão, atualize após a geração do projeto!
-          </h1>
-        )}
       </div>
     </Modal>
   );
