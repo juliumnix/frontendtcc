@@ -25,7 +25,7 @@ export default function NotifierModal({
   const [finished, setFinished] = useState(false);
   const [events, setEvents] = useState("");
   const serverURL = receptServer(GlobalURL);
-  const { id, needZIPFile, cleanState } = useCreateProjectContext();
+  const { id, needZIPFile, name, cleanState } = useCreateProjectContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -43,7 +43,6 @@ export default function NotifierModal({
           const parsedData = JSON.parse(event.data);
           console.log(parsedData.message);
           setEvents(parsedData.message);
-          // You can remove this condition to keep the connection open
           if (
             parsedData.message ==
             "Projeto criado e enviado para o Github, aproveite =)"
@@ -100,7 +99,7 @@ export default function NotifierModal({
 
     const blob = new Blob([response.data]);
 
-    const fileName = "seuarquivo.zip";
+    const fileName = `${name}.zip`;
     saveAs(blob, fileName);
   };
 

@@ -24,6 +24,7 @@ type ContextProps = {
   flutterDependencies: DependeciesProps[];
   id: String;
   needZIPFile: boolean;
+  name: String;
 };
 
 export const CreateProjectContext = createContext<ContextProps>({
@@ -44,6 +45,7 @@ export const CreateProjectContext = createContext<ContextProps>({
   flutterDependencies: [],
   id: "",
   needZIPFile: false,
+  name: "",
 });
 
 export const useCreateProjectContext = () => useContext(CreateProjectContext);
@@ -169,6 +171,7 @@ const CreateProjectProvider = ({ children }: createProjectContextProps) => {
         flutterDependencies,
         id,
         needZIPFile,
+        name,
       }}
     >
       {children}
